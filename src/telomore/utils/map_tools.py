@@ -199,9 +199,9 @@ def cigar_maps_more_bases(cigar1: str, cigar2: str) -> bool:
 
     Returns
     -------
-    bool
+    bool or None
         True if cigar1 maps more bases than cigar2, False if cigar2 maps
-        more or equal bases, None if equal
+        more bases, None if they map equal bases
 
     Notes
     -----
@@ -1305,10 +1305,10 @@ def generate_support_log(genome: str, qc_bam_file: str, output_handle: str) -> N
     For each position from 0 to (genome_length - 1):
     - Calculates coverage (total bases)
     - Calculates matching bases (bases matching reference)
-    - Prints and writes: position, coverage, matching_bases
+    - Prints position, coverage, matching_bases to stdout
     - Skips positions where no reads map (TypeError caught)
     
-    The output format allows plotting coverage profiles to visualize:
+    The output allows plotting coverage profiles to visualize:
     - Read support across the genome
     - Quality of consensus extensions at telomeres
     - Positions where support drops (potential trimming sites)
@@ -1316,9 +1316,8 @@ def generate_support_log(genome: str, qc_bam_file: str, output_handle: str) -> N
     Uses qual_threshold=1 to include all bases regardless of quality,
     providing a complete picture of coverage for QC purposes.
     
-    Note: Current implementation prints to stdout AND attempts to write
-    to file, but the write statement appears to have incorrect syntax
-    (should be log.write(f'{pos} {cov} {match}\\n')).
+    Note: Current implementation only prints to stdout. To write to file,
+    the log.write() call should be corrected.
     """
     # trim start/left-side
 

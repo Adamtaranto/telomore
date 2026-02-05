@@ -317,7 +317,7 @@ def get_chromosome(fasta: str, output_handle: str) -> None:
 
 
 def attach_seq(
-    left: str, right: str, chromsome: str, output_name: str, offset: int = 0
+    left: str, right: str, chromosome: str, output_name: str, offset: int = 0
 ) -> None:
     """
     Attach telomeric sequences to both ends of a chromosome sequence.
@@ -332,8 +332,8 @@ def attach_seq(
         Path to FASTA file containing left/5' telomeric sequence
     right : str
         Path to FASTA file containing right/3' telomeric sequence
-    chromsome : str
-        Path to FASTA file containing chromosome sequence (note: typo in param name)
+    chromosome : str
+        Path to FASTA file containing chromosome sequence
     output_name : str
         Path for output FASTA file with attached sequences
     offset : int, default=0
@@ -365,7 +365,7 @@ def attach_seq(
 
     left_seq = SeqIO.read(left, 'fasta')
     right_seq = SeqIO.read(right, 'fasta')
-    chrom = SeqIO.read(chromsome, 'fasta')
+    chrom = SeqIO.read(chromosome, 'fasta')
 
     if offset == 0:  # if offset is 0 offset:-offset fucks it up
         genome = chrom
@@ -448,7 +448,7 @@ def trim_to_cons(input_seq: str, num_base: int, output_handle: str) -> None:
     Notes
     -----
     Processing details:
-    - Sequences are trimmed to bases [0:num_base+1] (inclusive of num_base)
+    - Sequences are trimmed to bases [0:num_base+1] (indices 0 through num_base)
     - Sequence IDs are prefixed with 'trimmed_'
     - Descriptions are removed from output sequences
     - Sequences shorter than num_base are skipped with error log
