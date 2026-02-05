@@ -13,7 +13,7 @@ The tool supports both **Oxford Nanopore** long-read sequencing and **Illumina**
 
 ## Project Structure
 
-```
+```text
 telomore/
 ├── src/telomore/
 │   ├── __init__.py              # Package initialization
@@ -68,19 +68,23 @@ This design provides clean separation of concerns and makes file management stra
 Telomore wraps several external bioinformatics tools:
 
 **For Nanopore reads:**
+
 - `minimap2`: Long-read alignment with parameters optimized for soft-clipping
 - `lamassemble`: Consensus generation for dissimilar reads
 - `lastdb`/`last-train`: Training alignment parameters on the reference
 
 **For Illumina reads:**
+
 - `bowtie2`: Short-read paired-end alignment with local mode
 - `mafft`: Multiple sequence alignment for similar reads
 - `cons` (EMBOSS): Consensus calling from aligned sequences
 
 **Shared tools:**
+
 - `samtools`: SAM/BAM manipulation, sorting, and indexing
 
 Each wrapper function includes:
+
 - Input validation (file existence, parameter types)
 - Comprehensive logging at each step
 - Error handling with detailed error messages
@@ -103,24 +107,28 @@ Provides utilities for sequence file manipulation:
 Contains the core logic for telomere extension:
 
 **Terminal read identification:**
+
 - `get_terminal_reads()`: Extracts reads mapping to first/last 20bp of contigs
 - `get_left_soft()`/`get_right_soft()`: Filters soft-clipped reads extending beyond genome edges
 - Uses regex parsing of CIGAR strings to identify soft-clipped regions
 - Deduplicates by keeping the alignment with most mapped bases
 
-**Consensus extension logic (`stich_telo()`):**
+**Consensus extension logic (`stitch_telo()`):**
+
 - Analyzes soft-clipped portions of consensus alignments to reference
 - Extracts only the overhanging (extending) portion of consensus sequences
 - Handles edge cases: empty consensus, unmapped consensus, non-extending consensus
 - Concatenates: left_consensus + original_contig + right_consensus
 
 **Consensus validation and trimming:**
+
 - `trim_by_map()`/`trim_by_map_illumina()`: Trims consensus based on read support
 - `get_support_info()`: Calculates per-position coverage and base matching
 - Trimming criteria: coverage ≥ threshold AND match ratio ≥ 0.7
 - Default thresholds: Nanopore (cov≥5, Q≥10), Illumina (cov≥1, Q≥30)
 
 **Key algorithms:**
+
 - `mapped_bases()`: Parses CIGAR strings to count reference-consuming operations (M, D, N, X, =)
 - `cigar_maps_more_bases()`: Compares alignments to select best mapping per read
 - `revcomp_reads()`: Reverse-complements reads and quality scores for left-side processing
@@ -156,12 +164,14 @@ This ensures consensus sequences can only extend their intended end.
 ### Nanopore vs. Illumina Strategies
 
 **Nanopore (long reads, higher error rate):**
+
 - Uses `lamassemble` with trained LAST parameters for consensus of dissimilar sequences
 - Default coverage threshold = 5x (higher to account for errors)
 - Default quality threshold = Q10 (lower due to platform characteristics)
 - Single-pass mapping with soft-clipping to capture extensions
 
 **Illumina (short reads, lower error rate):**
+
 - Uses `mafft + cons` assuming reads are more similar
 - Default coverage threshold = 1x (lower due to higher accuracy)
 - Default quality threshold = Q30 (higher, leveraging platform accuracy)
@@ -171,13 +181,14 @@ This ensures consensus sequences can only extend their intended end.
 
 Soft-clipping occurs when a read extends beyond the reference. Example:
 
-```
+```text
 Reference:  ATCGATCG|
 Read:       ATCGATCGATCG
 CIGAR:      8M4S (8 matched, 4 soft-clipped)
 ```
 
 Telomore:
+
 1. Identifies reads with soft-clips extending beyond reference boundaries
 2. Extracts only the soft-clipped portions (the "extending" bases)
 3. Builds consensus from these extending portions
@@ -201,7 +212,8 @@ This trimming removes spurious bases while keeping well-supported extensions.
 ### Input Requirements
 
 1. **Reference FASTA**: Contigs with "linear" keyword in description line
-   ```
+
+   ```text
    >contig_1 linear
    ATCGATCG...
    ```
@@ -212,7 +224,7 @@ This trimming removes spurious bases while keeping well-supported extensions.
 
 ### Output Structure
 
-```
+```text
 {reference_basename}_{np|ill}_telomore/
 ├── {contig}_telomore_extended.fasta      # Final extended contig
 ├── {contig}_telomore_untrimmed.fasta     # Pre-trimming extended contig
@@ -225,6 +237,7 @@ This trimming removes spurious bases while keeping well-supported extensions.
 ### Log File Format
 
 The extension logs document:
+
 1. **FINAL GENOME EXTENSION**: Actual bases added after trimming
 2. **INITIAL CONSENSUS**: Raw consensus lengths before validation
 3. **CONSENSUS TRIMMING**: Trimming rules and bases removed
@@ -242,9 +255,9 @@ Telomore orchestrates multiple specialized bioinformatics tools rather than reim
 - **LAST**: Alignment with trainable parameters
 
 Python dependencies:
+
 - **BioPython**: Sequence parsing and manipulation
 - **pysam**: Python interface to samtools
-- **GitPython**: Version tracking
 
 ## Design Principles
 
@@ -258,16 +271,7 @@ Python dependencies:
 ## Limitations and Considerations
 
 - Requires pre-identification of linear contigs by the user
-- Optimized for Streptomycetes with TIRs (but applicable to other organisms)
+- Optimized for Streptomycetes (but applicable to other organisms)
 - Depends on availability of reads extending beyond assembly
 - Low coverage at chromosome ends may prevent extension
 - Repetitive telomeric sequences may complicate consensus generation
-
-## Future Enhancements
-
-The codebase is structured to support potential additions:
-- Additional sequencing platforms (PacBio, etc.)
-- Alternative consensus algorithms
-- Automated linear contig detection
-- Integration with assembly pipelines
-- Telomere motif detection and validation
