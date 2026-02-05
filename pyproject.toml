@@ -22,7 +22,7 @@ dynamic = ["version"]
 
 # Optional dependencies for testing
 [project.optional-dependencies]
-dev = ["hatch", "isort", "numpydoc-validation", "pre-commit", "ruff"]
+dev = ["hatch", "isort", "numpydoc-validation", "pre-commit", "pydocstyle", "ruff"]
 
 [project.urls]
 documentation = "https://github.com/dalofa/telomore"
