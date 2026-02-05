@@ -1,6 +1,4 @@
-"""
-Functions for generating useful QC metrics from the telomore script.
-"""
+"""Functions for generating useful QC metrics from the telomore script."""
 
 import csv
 import os

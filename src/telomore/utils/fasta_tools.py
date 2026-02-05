@@ -1,6 +1,4 @@
-"""
-Utilities for handling fasta files.
-"""
+"""Utilities for handling fasta files."""
 
 from itertools import zip_longest
 import logging
@@ -91,7 +89,6 @@ def get_linear_elements(fasta_file: str) -> list[str]:
     Empty list is returned if no linear contigs are found, which causes
     the workflow to exit gracefully.
     """
-
     linear_list = []
     for record in SeqIO.parse(fasta_file, 'fasta'):
         if 'linear' in record.description:
@@ -287,7 +284,6 @@ def get_chromosome(fasta: str, output_handle: str) -> None:
     Logging messages indicate which contig was selected and whether it was
     the only contig or chosen as the longest.
     """
-
     # test if there are a single entry in the fasta file
     try:  # there is a single entry
         chromosome = SeqIO.read(fasta, format='fasta')
@@ -362,7 +358,6 @@ def attach_seq(
     - Chromosome bases 100-9900 are retained
     - Left sequence + chromosome[100:9900] + right sequence
     """
-
     left_seq = SeqIO.read(left, 'fasta')
     right_seq = SeqIO.read(right, 'fasta')
     chrom = SeqIO.read(chromosome, 'fasta')
@@ -456,7 +451,6 @@ def trim_to_cons(input_seq: str, num_base: int, output_handle: str) -> None:
 
     If all sequences are too short, an empty output file may be created.
     """
-
     # load file
     with open(input_seq) as fasta_file:
         all_rec = []
@@ -521,7 +515,6 @@ def strip_fasta(
     - All sequences in the file are processed identically
     - No validation that x is less than sequence length
     """
-
     assert type(x) is int
 
     records = []
@@ -579,7 +572,6 @@ def build_extended_fasta(
     The [linear] tag allows downstream tools to identify which contigs
     were extended.
     """
-
     seq_rec_list = []  # list of seqrecord to write to newfile
 
     for record in SeqIO.parse(org_fasta, 'fasta'):

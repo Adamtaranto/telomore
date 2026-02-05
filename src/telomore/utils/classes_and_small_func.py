@@ -1,6 +1,4 @@
-"""
-Class for handling files related to each replicon in a file
-"""
+"""Class for handling files related to each replicon."""
 
 import os
 import shutil

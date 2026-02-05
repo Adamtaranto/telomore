@@ -1,5 +1,6 @@
-"""
-Telomore: Script for finding and extracting telomeres from nanopore or illumina reads,
+"""Telomore main application module.
+
+Script for finding and extracting telomeres from nanopore or illumina reads,
 which have been excluded from a de novo assembly.
 """
 
@@ -121,7 +122,6 @@ def entrypoint() -> None:
     Logging is configured before main() is called, with output to both
     console and telomore.log file (unless --quiet is specified).
     """
-
     args = get_args()  # Get arguments
     setup_logging(log_file='telomore.log', quiet=args.quiet)  # setup logging
     try:

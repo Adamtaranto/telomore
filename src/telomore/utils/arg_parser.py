@@ -1,6 +1,4 @@
-"""
-Argument parser for the telomore tool.
-"""
+"""Argument parser for the telomore tool."""
 
 import argparse
 from argparse import Namespace
@@ -11,7 +9,7 @@ from telomore._version import __version__
 
 
 def get_args() -> Namespace:
-    """
+    r"""
     Parse and validate command-line arguments for Telomore.
 
     Defines the command-line interface for Telomore, including all required
@@ -204,7 +202,6 @@ def setup_logging(log_file: str = 'telomore.log', quiet: bool = False) -> None:
     This allows users to suppress verbose console output while maintaining
     a complete log file for debugging and reproducibility.
     """
-
     if quiet is True:
         handlers_to_use = [
             logging.FileHandler(log_file),  # Log file

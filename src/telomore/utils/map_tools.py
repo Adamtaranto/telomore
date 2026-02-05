@@ -1,6 +1,4 @@
-"""
-Functions for handling read mappings. Primarily for extracting and filtering terminal reads.
-"""
+"""Functions for handling read mappings and extracting terminal reads."""
 
 import gzip
 import logging
@@ -84,7 +82,7 @@ def sam_to_readpair(
 
 
 def sam_to_fastq(sam_in: Path, fastq_out: Path) -> None:
-    """
+    r"""
     Convert SAM alignment file to FASTQ format, excluding unmapped reads.
 
     Extracts sequence and quality information from aligned reads in a SAM file
@@ -268,7 +266,6 @@ def get_terminal_reads(
     reads that may contain sequence extending beyond the assembly, which
     can be used to build consensus extensions.
     """
-
     input = pysam.AlignmentFile(sorted_bam_file, 'r')
 
     # Fetch all reads aligned at start or end of reference
@@ -332,7 +329,7 @@ def get_terminal_reads(
 
 
 def get_left_soft(sam_file: Path, left_out: Path, offset: int = 0) -> None:
-    """
+    r"""
     Extract reads with 5' soft-clipping that extends beyond reference start.
 
     Identifies reads where the soft-clipped portion at the 5' end would extend
@@ -399,7 +396,7 @@ def get_left_soft(sam_file: Path, left_out: Path, offset: int = 0) -> None:
 def get_right_soft(
     sam_file: Path, contig: Path, right_out: Path, offset: int = 0
 ) -> None:
-    """
+    r"""
     Extract reads with 3' soft-clipping that extends beyond reference end.
 
     Identifies reads where the soft-clipped portion at the 3' end would extend
@@ -497,7 +494,6 @@ def revcomp_reads(reads_in: str, reads_out: str) -> None:
     reverse-complemented before consensus building to match the expected
     5' to 3' orientation for extension sequences.
     """
-
     with open(reads_in, 'r') as input_handle, open(reads_out, 'w') as output_handle:
         for record in SeqIO.parse(input_handle, 'fastq'):
             # Get the reverse complement of the sequence
@@ -757,7 +753,6 @@ def stich_telo(
     - Error messages if consensus rejected
     - Full consensus sequences
     """
-
     left_log_mes = ''
     # Check if an empty left consensus was used to generate the map:
     if is_consensus_empty(left_map):

@@ -1,6 +1,4 @@
-"""
-Functions for running CLI-tools to map reads and generate consensus.
-"""
+"""Functions for running CLI-tools to map reads and generate consensus."""
 
 import logging
 import os
@@ -580,7 +578,6 @@ def generate_consensus_lamassemble(db_name: str, reads: str, output: str) -> Non
     The function also saves the alignment of reads to the consensus in a
     separate .aln file for quality assessment.
     """
-
     # Check if only a single read is present before generating consensus
     # If that is the case write just that read to consensus file
     sequence_count = 0
@@ -664,7 +661,6 @@ def generate_consensus_mafft(reads: str, output: str) -> None:
 
     Temporary FASTA file created during conversion is automatically cleaned up.
     """
-
     # Check if only a single read is mapped and use that as the consensus if there are no others.
     sequence_count = 0
     for record in SeqIO.parse(reads, 'fastq'):
