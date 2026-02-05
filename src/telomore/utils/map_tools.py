@@ -24,20 +24,20 @@ def sam_to_readpair(
     Parameters
     ----------
     sam_in : Path
-        Path to input SAM alignment file
+        Path to input SAM alignment file.
     fastq_in1 : Path
-        Path to forward/R1 FASTQ file (gzip compressed)
+        Path to forward/R1 FASTQ file (gzip compressed).
     fastq_in2 : Path
-        Path to reverse/R2 FASTQ file (gzip compressed)
+        Path to reverse/R2 FASTQ file (gzip compressed).
     fastq_out1 : Path
-        Path for output R1 FASTQ file containing extracted read pairs
+        Path for output R1 FASTQ file containing extracted read pairs.
     fastq_out2 : Path
-        Path for output R2 FASTQ file containing extracted read pairs
+        Path for output R2 FASTQ file containing extracted read pairs.
 
     Returns
     -------
     None
-        Writes extracted read pairs to fastq_out1 and fastq_out2
+        Writes extracted read pairs to fastq_out1 and fastq_out2.
 
     Notes
     -----
@@ -92,14 +92,14 @@ def sam_to_fastq(sam_in: Path, fastq_out: Path) -> None:
     Parameters
     ----------
     sam_in : Path
-        Path to input SAM alignment file
+        Path to input SAM alignment file.
     fastq_out : Path
-        File handle (opened in write mode) for output FASTQ
+        File handle (opened in write mode) for output FASTQ.
 
     Returns
     -------
     None
-        Writes FASTQ records to the provided file handle
+        Writes FASTQ records to the provided file handle.
 
     Notes
     -----
@@ -136,12 +136,12 @@ def mapped_bases(cigarstring: str) -> int:
     Parameters
     ----------
     cigarstring : str
-        CIGAR string from SAM alignment (e.g., '100M5S', '50M2D50M')
+        CIGAR string from SAM alignment (e.g., '100M5S', '50M2D50M').
 
     Returns
     -------
     int
-        Total number of bases that align to the reference sequence
+        Total number of bases that align to the reference sequence.
 
     Notes
     -----
@@ -191,15 +191,15 @@ def cigar_maps_more_bases(cigar1: str, cigar2: str) -> bool:
     Parameters
     ----------
     cigar1 : str
-        First CIGAR string to compare
+        First CIGAR string to compare.
     cigar2 : str
-        Second CIGAR string to compare
+        Second CIGAR string to compare.
 
     Returns
     -------
     bool or None
         True if cigar1 maps more bases than cigar2, False if cigar2 maps
-        more bases, None if they map equal bases
+        more bases, None if they map equal bases.
 
     Notes
     -----
@@ -237,19 +237,19 @@ def get_terminal_reads(
     Parameters
     ----------
     sorted_bam_file : Path
-        Path to sorted BAM alignment file
+        Path to sorted BAM alignment file.
     contig : Path
-        Name/ID of the contig to extract terminal reads from
+        Name/ID of the contig to extract terminal reads from.
     loutput_handle : Path
-        Path for output BAM file containing left-terminal reads
+        Path for output BAM file containing left-terminal reads.
     routput_handle : Path
-        Path for output BAM file containing right-terminal reads
+        Path for output BAM file containing right-terminal reads.
 
     Returns
     -------
     None
         Writes left-terminal reads to loutput_handle and right-terminal reads
-        to routput_handle
+        to routput_handle.
 
     Notes
     -----
@@ -340,18 +340,18 @@ def get_left_soft(sam_file: Path, left_out: Path, offset: int = 0) -> None:
     Parameters
     ----------
     sam_file : Path
-        Path to input SAM alignment file
+        Path to input SAM alignment file.
     left_out : Path
-        Base path for output files (adds .sam and .fastq extensions)
+        Base path for output files (adds .sam and .fastq extensions).
     offset : int, default=0
-        Additional bases to include beyond the soft-clipped region
+        Additional bases to include beyond the soft-clipped region.
 
     Returns
     -------
     None
         Creates two output files:
-        - {left_out}.sam: Full alignment records
-        - {left_out}.fastq: Soft-clipped sequences only
+        - {left_out}.sam: Full alignment records.
+        - {left_out}.fastq: Soft-clipped sequences only.
 
     Notes
     -----
@@ -407,20 +407,20 @@ def get_right_soft(
     Parameters
     ----------
     sam_file : Path
-        Path to input SAM alignment file
+        Path to input SAM alignment file.
     contig : Path
-        Name/ID of the contig to determine reference length
+        Name/ID of the contig to determine reference length.
     right_out : Path
-        Base path for output files (adds .sam and .fastq extensions)
+        Base path for output files (adds .sam and .fastq extensions).
     offset : int, default=0
-        Additional bases to include beyond the soft-clipped region
+        Additional bases to include beyond the soft-clipped region.
 
     Returns
     -------
     None
         Creates two output files:
-        - {right_out}.sam: Full alignment records
-        - {right_out}.fastq: Soft-clipped sequences only
+        - {right_out}.sam: Full alignment records.
+        - {right_out}.fastq: Soft-clipped sequences only.
 
     Notes
     -----
@@ -473,14 +473,14 @@ def revcomp_reads(reads_in: str, reads_out: str) -> None:
     Parameters
     ----------
     reads_in : str
-        Path to input FASTQ file
+        Path to input FASTQ file.
     reads_out : str
-        Path for output reverse-complemented FASTQ file
+        Path for output reverse-complemented FASTQ file.
 
     Returns
     -------
     None
-        Writes reverse-complemented reads to reads_out
+        Writes reverse-complemented reads to reads_out.
 
     Notes
     -----
@@ -526,14 +526,14 @@ def revcomp(fasta_in: str, fasta_out: str) -> None:
     Parameters
     ----------
     fasta_in : str
-        Path to input FASTA file
+        Path to input FASTA file.
     fasta_out : str
-        Path for output reverse-complemented FASTA file
+        Path for output reverse-complemented FASTA file.
 
     Returns
     -------
     None
-        Writes reverse-complemented sequences to fasta_out
+        Writes reverse-complemented sequences to fasta_out.
 
     Notes
     -----
@@ -571,12 +571,12 @@ def is_map_empty(file_path: str) -> bool:
     Parameters
     ----------
     file_path : str
-        Path to BAM file to check
+        Path to BAM file to check.
 
     Returns
     -------
     bool
-        False if the file contains at least one read, True if empty
+        False if the file contains at least one read, True if empty.
 
     Notes
     -----
@@ -609,13 +609,13 @@ def is_consensus_unmapped(file_path: str) -> bool:
     Parameters
     ----------
     file_path : str
-        Path to BAM file to check
+        Path to BAM file to check.
 
     Returns
     -------
     bool
         True if all reads are unmapped or file is empty, False if any
-        read is mapped
+        read is mapped.
 
     Notes
     -----
@@ -654,13 +654,13 @@ def is_consensus_empty(file_path: str) -> bool:
     Parameters
     ----------
     file_path : str
-        Path to BAM file to check
+        Path to BAM file to check.
 
     Returns
     -------
     bool
         True if the file contains exactly one unmapped read with no sequence,
-        False otherwise
+        False otherwise.
 
     Notes
     -----
@@ -689,7 +689,7 @@ def is_consensus_empty(file_path: str) -> bool:
         return False  # Either more reads, or the read does not meet the conditions
 
 
-def stich_telo(
+def stitch_telo(
     ref: str,
     left_map: str,
     right_map: str,
@@ -709,24 +709,24 @@ def stich_telo(
     Parameters
     ----------
     ref : str
-        Path to reference FASTA file
+        Path to reference FASTA file.
     left_map : str
-        Path to BAM file with left consensus aligned to reference
+        Path to BAM file with left consensus aligned to reference.
     right_map : str
-        Path to BAM file with right consensus aligned to reference
+        Path to BAM file with right consensus aligned to reference.
     outfile : str
-        Path for output extended FASTA file
+        Path for output extended FASTA file.
     logout : str
-        Path for output log file documenting extension
+        Path for output log file documenting extension.
     tmp_left : str
-        Path for temporary left consensus FASTA file
+        Path for temporary left consensus FASTA file.
     tmp_right : str
-        Path for temporary right consensus FASTA file
+        Path for temporary right consensus FASTA file.
 
     Returns
     -------
     tuple of (int, int)
-        Length of left consensus and length of right consensus in bases
+        Length of left consensus and length of right consensus in bases.
 
     Notes
     -----
@@ -763,7 +763,7 @@ def stich_telo(
         left_seqs = []
         left_log_mes = f'#The consensus produced for the left-side does not map to left-side of {ref}'
     else:
-        # extract left cons-to-stich
+        # extract left cons-to-stitch
         l_sam_in = pysam.AlignmentFile(left_map, 'r')
         left_seqs = []
         start_clip = r'^(\d+)S'
@@ -797,7 +797,7 @@ def stich_telo(
         right_seqs = []
         right_log_mes = f'#The consensus produced for the right-side does not map to the right-side of {ref}'
     else:
-        # extract right cons-to-stich
+        # extract right cons-to-stitch
         r_sam_in = pysam.AlignmentFile(right_map, 'r')
         seq_end = r_sam_in.lengths[0]  # get length of reference
         right_seqs = []
@@ -815,7 +815,7 @@ def stich_telo(
                     right_seqs.append(seq)
         r_sam_in.close()
 
-    # stich the fuckers toghether
+    # stitch the fuckers toghether
     genome = SeqIO.read(ref, 'fasta')
 
     # check if no conesnsus extens beyond the reference
@@ -880,20 +880,20 @@ def get_support_info(
     Parameters
     ----------
     bam_file : str
-        Path to BAM alignment file
+        Path to BAM alignment file.
     genome : str
-        Path to reference FASTA file
+        Path to reference FASTA file.
     position : int
-        Zero-based position to query
+        Zero-based position to query.
     qual_threshold : int, default=1
-        Minimum base quality score to include in counts
+        Minimum base quality score to include in counts.
 
     Returns
     -------
     tuple of (int, int)
         (coverage, matching_bases) where:
-        - coverage: Total number of bases at this position
-        - matching_bases: Number of bases matching the reference
+        - coverage: Total number of bases at this position.
+        - matching_bases: Number of bases matching the reference.
 
     Notes
     -----
@@ -971,24 +971,24 @@ def trim_by_map(
     Parameters
     ----------
     untrimmed_assembly : str
-        Path to FASTA file with untrimmed consensus attached
+        Path to FASTA file with untrimmed consensus attached.
     sorted_bam_file : str
-        Path to sorted BAM of terminal reads aligned to untrimmed assembly
+        Path to sorted BAM of terminal reads aligned to untrimmed assembly.
     output_handle : str
-        Path for output trimmed FASTA file
+        Path for output trimmed FASTA file.
     cons_log : str
-        Path to existing log file (will be appended with trimming info)
+        Path to existing log file (will be appended with trimming info).
     cov_thres : int, default=5
-        Minimum coverage depth required to keep a position
+        Minimum coverage depth required to keep a position.
     ratio_thres : float, default=0.7
-        Minimum fraction of reads matching reference to keep a position
+        Minimum fraction of reads matching reference to keep a position.
     qual_thres : int, default=0
-        Minimum base quality score to include in coverage calculation
+        Minimum base quality score to include in coverage calculation.
 
     Returns
     -------
     None
-        Writes trimmed assembly to output_handle and appends to cons_log
+        Writes trimmed assembly to output_handle and appends to cons_log.
 
     Notes
     -----
@@ -1131,24 +1131,24 @@ def trim_by_map_illumina(
     Parameters
     ----------
     untrimmed_assembly : str
-        Path to FASTA file with untrimmed consensus attached
+        Path to FASTA file with untrimmed consensus attached.
     sorted_bam_file : str
-        Path to sorted BAM of terminal reads aligned to untrimmed assembly
+        Path to sorted BAM of terminal reads aligned to untrimmed assembly.
     output_handle : str
-        Path for output trimmed FASTA file
+        Path for output trimmed FASTA file.
     cons_log : str
-        Path to existing log file (will be appended with trimming info)
+        Path to existing log file (will be appended with trimming info).
     cov_thres : int, default=1
-        Minimum coverage depth required to keep a position
+        Minimum coverage depth required to keep a position.
     ratio_thres : float, default=0.7
-        Minimum fraction of reads matching reference to keep a position
+        Minimum fraction of reads matching reference to keep a position.
     qual_thres : int, default=30
-        Minimum base quality score (Q30) to include in coverage calculation
+        Minimum base quality score (Q30) to include in coverage calculation.
 
     Returns
     -------
     None
-        Writes trimmed assembly to output_handle and appends to cons_log
+        Writes trimmed assembly to output_handle and appends to cons_log.
 
     Notes
     -----
@@ -1284,16 +1284,16 @@ def generate_support_log(genome: str, qc_bam_file: str, output_handle: str) -> N
     Parameters
     ----------
     genome : str
-        Path to reference genome FASTA file
+        Path to reference genome FASTA file.
     qc_bam_file : str
-        Path to BAM file with QC reads aligned to genome
+        Path to BAM file with QC reads aligned to genome.
     output_handle : str
-        Path for output log file with coverage statistics
+        Path for output log file with coverage statistics.
 
     Returns
     -------
     None
-        Writes position, coverage, and matching bases to output_handle
+        Writes position, coverage, and matching bases to output_handle.
 
     Notes
     -----

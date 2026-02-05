@@ -1,4 +1,5 @@
-"""Telomore main application module.
+"""
+Telomore main application module.
 
 Script for finding and extracting telomeres from nanopore or illumina reads,
 which have been excluded from a de novo assembly.
@@ -34,7 +35,7 @@ from telomore.utils.map_tools import (
     get_terminal_reads,
     revcomp,
     revcomp_reads,
-    stich_telo,
+    stitch_telo,
     trim_by_map,
     trim_by_map_illumina,
 )
@@ -58,12 +59,12 @@ def check_dependencies(required_tools: list[str] | None = None) -> None:
     required_tools : list of str or None, optional
         List of command-line tool names to check. If None, no tools are checked.
         Common tools include: minimap2, samtools, lamassemble, mafft, bowtie2,
-        lastdb, lastal, cons
+        lastdb, lastal, cons.
 
     Returns
     -------
     None
-        Logs tool locations or exits if dependencies are missing
+        Logs tool locations or exits if dependencies are missing.
 
     Raises
     ------
@@ -105,7 +106,7 @@ def entrypoint() -> None:
     Returns
     -------
     None
-        Executes the main workflow or exits with error code 1 on failure
+        Executes the main workflow or exits with error code 1 on failure.
 
     Raises
     ------
@@ -158,7 +159,7 @@ def main(args: Namespace) -> None:
     Returns
     -------
     None
-        Creates output directory with extended assemblies and QC files
+        Creates output directory with extended assemblies and QC files.
 
     Raises
     ------
@@ -386,7 +387,7 @@ def main(args: Namespace) -> None:
         elif args.mode == 'illumina':
             cons_log_out = replicon.cons_log_ill_out
 
-        stich_telo(
+        stitch_telo(
             ref=replicon.contig_fasta,
             left_map=replicon.l_map_out,
             right_map=replicon.r_map_out,
