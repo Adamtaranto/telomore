@@ -27,13 +27,13 @@ class Replicon:
         Replicon identifier
     org_fasta : str
         Original FASTA file path
-    
+
     Mapping files:
         org_map : str
             BAM file of reads mapped to original contig
         org_map_index : str
             BAI index for org_map
-    
+
     Terminal read files:
         left_sam, right_sam : str
             SAM files with left/right terminal read alignments
@@ -43,7 +43,7 @@ class Replicon:
             Filtered SAM files
         left_filt_fq, right_filt_fq : str
             Filtered FASTQ files
-    
+
     Consensus files:
         l_cons_out : str
             Left consensus (reverse complement, temporary)
@@ -57,7 +57,7 @@ class Replicon:
             Right consensus (final)
         r_cons_alignment : str
             Alignment file for right consensus
-    
+
     Extension files:
         contig_fasta : str
             Extracted single-contig FASTA
@@ -81,7 +81,7 @@ class Replicon:
             BAI index for trim_map
         trim_out : str
             Final trimmed extended assembly
-    
+
     QC files:
         qc_out : str
             Final QC BAM file
@@ -93,11 +93,11 @@ class Replicon:
     All file paths are automatically generated from the replicon name
     following a consistent naming convention. This ensures files are
     traceable and organized.
-    
+
     The class provides methods for:
     - cleanup_tmp_files(): Remove intermediate processing files
     - mv_files(): Move final output files to designated directory
-    
+
     Files are categorized as:
     - Temporary: Deleted after successful extension
     - Output: Moved to results directory for user
@@ -188,13 +188,13 @@ class Replicon:
         - Consensus mappings: l_map_out, r_map_out, and their indices
         - Stitching intermediates: stitch_left_fasta, stitch_right_fasta
         - Trimming map: trim_map, trim_map_index
-        
+
         Files preserved (not deleted):
         - stitch_out: Untrimmed extended assembly
         - trim_out: Final trimmed extended assembly
         - qc_out, qc_out_index: QC alignment files
         - cons_log_np_out or cons_log_ill_out: Extension logs
-        
+
         Only deletes files that exist - missing files are silently skipped.
         Call this method after successful completion of extension workflow
         to reduce disk space usage.
@@ -259,17 +259,17 @@ class Replicon:
         -----
         Files moved for all modes:
         - stitch_out: Untrimmed extended assembly
-        - trim_out: Final trimmed extended assembly  
+        - trim_out: Final trimmed extended assembly
         - qc_out: QC alignment BAM
         - qc_out_index: QC alignment BAM index
-        
+
         Mode-specific files:
         - If mode='nanopore': moves cons_log_np_out
         - If mode='illumina': moves cons_log_ill_out
-        
+
         The destination folder must already exist. Files retain their
         original names in the destination directory.
-        
+
         This method should be called after cleanup_tmp_files() to organize
         the final results while removing intermediate files from the working
         directory.

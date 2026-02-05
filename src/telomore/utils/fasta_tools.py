@@ -276,11 +276,11 @@ def get_chromosome(fasta: str, output_handle: str) -> None:
     Selection logic:
     - Single contig: Uses that contig directly
     - Multiple contigs: Selects the longest contig by sequence length
-    
+
     The function assumes the longest contig is the main chromosome, which
     is appropriate for bacterial genomes or assemblies where the chromosome
     is expected to be significantly longer than plasmids or contaminants.
-    
+
     Logging messages indicate which contig was selected and whether it was
     the only contig or chosen as the longest.
     """
@@ -566,7 +566,7 @@ def build_extended_fasta(
     - For linear contigs: replaces with extended version from Replicon.trim_out
     - For other contigs: copies unchanged from original
     - Adds '[linear]' to description of extended contigs
-    
+
     This ensures the final assembly maintains the original contig order,
     which is important for tools that expect specific reference structures.
     The [linear] tag allows downstream tools to identify which contigs

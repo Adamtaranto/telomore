@@ -47,7 +47,7 @@ def sam_to_readpair(
     - Second pass: Extracts matching reads from gzipped FASTQ files
     - Both R1 and R2 are extracted if read name appears in SAM
     - Output files are uncompressed FASTQ format
-    
+
     The input FASTQ files must be gzip-compressed (.gz), while outputs
     are plain text for immediate downstream processing.
     """
@@ -108,7 +108,7 @@ def sam_to_fastq(sam_in: Path, fastq_out: Path) -> None:
     - If quality scores are missing, assigns default high quality 'I' (Q40)
     - FASTQ format: @name\\nseq\\n+\\nqual\\n
     - The fastq_out parameter should be an open file handle, not a path string
-    
+
     Quality score handling is important for reads extracted from SAM files
     that may not have retained the original quality information.
     """
@@ -151,13 +151,13 @@ def mapped_bases(cigarstring: str) -> int:
     - N: skipped region from reference
     - X: sequence mismatch
     - =: sequence match
-    
+
     Operations that do NOT consume reference (excluded from count):
     - S: soft clipping
     - I: insertion to reference
     - H: hard clipping
     - P: padding
-    
+
     This count represents how much of the reference sequence is covered
     by the alignment, which is useful for selecting the best alignment
     when a read maps to multiple positions.
@@ -205,12 +205,12 @@ def cigar_maps_more_bases(cigar1: str, cigar2: str) -> bool:
     -----
     The comparison is based on the number of reference-consuming bases
     (M, D, N, X, =) calculated by the mapped_bases function.
-    
+
     Return values:
     - True: cigar1 has more mapped bases
-    - False: cigar2 has more mapped bases  
+    - False: cigar2 has more mapped bases
     - None: both have equal mapped bases (implicit, no return statement)
-    
+
     This function is used to resolve multi-mapping reads by keeping the
     alignment that covers the most reference sequence, which typically
     indicates a better alignment quality.
@@ -256,12 +256,12 @@ def get_terminal_reads(
     Terminal region definition:
     - Left terminal: positions 0-20 (first 20bp)
     - Right terminal: (seq_end - 20) to seq_end (last 20bp)
-    
+
     Multi-mapping read handling:
     - If a read maps to terminal region multiple times, compare CIGAR strings
     - Keep only the alignment mapping the most reference bases
     - Skips reads with no sequence (query_sequence is None)
-    
+
     This function is essential for the Telomore workflow as it identifies
     reads that may contain sequence extending beyond the assembly, which
     can be used to build consensus extensions.
@@ -359,11 +359,11 @@ def get_left_soft(sam_file: Path, left_out: Path, offset: int = 0) -> None:
     - Looks for CIGAR patterns starting with soft-clip: ^(\\d+)S
     - Only keeps reads where soft-clip length > reference_start position
     - This ensures the clipped sequence extends beyond the reference start
-    
+
     FASTQ output contains:
     - Sequence: bases [0:clip_num+offset] from read
     - Quality: Phred scores converted to Sanger ASCII (Q+33)
-    
+
     The offset parameter allows including additional bases for context,
     which can improve consensus building at the assembly boundary.
     """
@@ -428,11 +428,11 @@ def get_right_soft(
     - Looks for CIGAR patterns ending with soft-clip: (\\d+)S$
     - Only keeps reads where (clip_length + reference_end) > seq_end
     - This ensures the clipped sequence extends beyond the reference end
-    
+
     FASTQ output contains:
     - Sequence: last (clip_num+offset) bases from read
     - Quality: Phred scores converted to Sanger ASCII (Q+33)
-    
+
     The offset parameter allows including additional bases for context,
     which can improve consensus building at the assembly boundary.
     """
@@ -489,7 +489,7 @@ def revcomp_reads(reads_in: str, reads_out: str) -> None:
     - Quality scores: Reversed to match new sequence orientation
     - Read ID: Prefixed with 'rev_'
     - Original ID and quality annotations are preserved in structure
-    
+
     This is necessary for left-terminal reads because they need to be
     reverse-complemented before consensus building to match the expected
     5' to 3' orientation for extension sequences.
@@ -541,7 +541,7 @@ def revcomp(fasta_in: str, fasta_out: str) -> None:
     - Sequence: Reverse complemented (A↔T, G↔C, reversed)
     - Sequence ID: Prefixed with 'rev_'
     - Description preserved from original
-    
+
     Unlike revcomp_reads, this operates on FASTA format and doesn't
     need to handle quality scores. Used primarily for consensus sequences
     built from left-terminal reads.
@@ -583,7 +583,7 @@ def is_map_empty(file_path: str) -> bool:
     Implementation uses next() to attempt fetching the first read:
     - If successful: Returns False (file not empty)
     - If StopIteration raised: Returns True (file is empty)
-    
+
     This is more efficient than loading all reads since it stops at
     the first read found. Empty BAM files indicate no reads aligned
     in a mapping step, which may require special handling.
@@ -624,7 +624,7 @@ def is_consensus_unmapped(file_path: str) -> bool:
     - Returns True if file is empty (no reads)
     - Returns False immediately upon finding first mapped read
     - Returns True only if all reads are unmapped
-    
+
     An unmapped consensus indicates the consensus sequence doesn't align
     to the expected position on the reference, suggesting it may not be
     a valid extension or may belong elsewhere in the genome.
@@ -668,11 +668,11 @@ def is_consensus_empty(file_path: str) -> bool:
     1. Exactly one read in the file
     2. Read is flagged as unmapped
     3. Read has no sequence (seq is None or '*')
-    
+
     This specific pattern occurs when an empty FASTA sequence (often produced
     when no terminal reads are found) is mapped against the reference. The
     aligner produces a single unmapped record with no sequence data.
-    
+
     Distinguishes between:
     - Empty consensus: No reads to build consensus from
     - Unmapped consensus: Consensus built but doesn't align to expected location
@@ -735,18 +735,18 @@ def stich_telo(
     - Looks for 5' soft-clipping extending beyond position 0
     - Adjusts for offset between soft-clip and actual overhang
     - Logs if consensus is empty, unmapped, or doesn't extend reference
-    
+
     Right consensus processing:
     - Extracts reads mapping near reference end (position > 1000)
     - Looks for 3' soft-clipping extending beyond reference length
     - Adjusts for offset between soft-clip and actual overhang
     - Logs if consensus is empty, unmapped, or doesn't extend reference
-    
+
     The output file contains: left_consensus + original_reference + right_consensus
-    
+
     Empty SeqRecord objects are created when consensus fails validation,
     allowing the workflow to continue without breaking on concatenation.
-    
+
     Log file format includes:
     - Section header
     - Consensus lengths
@@ -902,12 +902,12 @@ def get_support_info(
     - Only includes bases with quality >= qual_threshold
     - Includes secondary mappings (read_callback='nofilter')
     - Sums all bases for total coverage
-    
+
     Reference matching:
     - Compares reference base at position to read bases
     - If reference is 'N': matching_bases = 0
     - Otherwise: matching_bases = count of bases matching reference
-    
+
     The matching ratio (matching_bases/coverage) indicates how well
     reads support the reference sequence at that position. High ratios
     (>0.7) indicate strong support, while low ratios suggest the consensus
@@ -1000,20 +1000,20 @@ def trim_by_map(
     3. Right end: Scans positions (end - right_length) to end
        - Stops at first position meeting coverage and ratio thresholds
        - Trims all bases after this position
-    
+
     Validation criteria:
     - Coverage >= cov_thres
     - (matching_bases / coverage) > ratio_thres
     - Base quality >= qual_thres
-    
+
     Outcomes logged for each end:
     - Both rejected: Returns original reference only
     - One rejected: Keeps validated consensus on one side only
     - Both validated: Keeps both trimmed consensus sequences
-    
+
     The output sequence ID indicates whether consensus was attached and
     includes descriptive suffix about trimming results.
-    
+
     Designed for Nanopore data: Lower coverage threshold (5x) but
     similar ratio threshold to Illumina version.
     """
@@ -1160,20 +1160,20 @@ def trim_by_map_illumina(
     3. Right end: Scans positions (end - right_length) to end
        - Stops at first position meeting coverage and ratio thresholds
        - Trims all bases after this position
-    
+
     Validation criteria:
     - Coverage >= cov_thres
     - (matching_bases / coverage) > ratio_thres
     - Base quality >= qual_thres
-    
+
     Outcomes logged for each end:
     - Both rejected: Returns original reference only
     - One rejected: Keeps validated consensus on one side only
     - Both validated: Keeps both trimmed consensus sequences
-    
+
     The output sequence ID indicates whether consensus was attached and
     includes descriptive suffix about trimming results.
-    
+
     Designed for Illumina data: Higher quality threshold (Q30) but
     lower coverage requirement (1x) compared to Nanopore version.
     Illumina's higher per-base accuracy allows more stringent quality
@@ -1302,15 +1302,15 @@ def generate_support_log(genome: str, qc_bam_file: str, output_handle: str) -> N
     - Calculates matching bases (bases matching reference)
     - Prints position, coverage, matching_bases to stdout
     - Skips positions where no reads map (TypeError caught)
-    
+
     The output allows plotting coverage profiles to visualize:
     - Read support across the genome
     - Quality of consensus extensions at telomeres
     - Positions where support drops (potential trimming sites)
-    
+
     Uses qual_threshold=1 to include all bases regardless of quality,
     providing a complete picture of coverage for QC purposes.
-    
+
     Note: Current implementation only prints to stdout. To write to file,
     the log.write() call should be corrected.
     """

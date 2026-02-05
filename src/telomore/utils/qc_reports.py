@@ -57,13 +57,13 @@ def qc_map(
     5. Maps deduplicated reads to extended assembly using minimap2
     6. Sorts and indexes the resulting BAM file
     7. Cleans up temporary FASTQ file
-    
+
     The resulting BAM file can be visualized in IGV or analyzed with
     samtools to assess:
     - Coverage across extended regions
     - Read support for consensus sequences
     - Consistency of read alignments at telomeres
-    
+
     Deduplication is critical because the same read may appear in both
     left and right terminal sets if it maps near both ends.
     """
@@ -135,12 +135,12 @@ def qc_map_illumina(
     7. Maps paired reads to extended assembly using BWA-MEM
     8. Sorts and indexes the resulting BAM file
     9. Cleans up temporary directory
-    
+
     The paired-end approach ensures:
     - Proper insert size analysis for extended regions
     - Better mapping quality through paired information
     - Accurate assessment of consensus support from both read ends
-    
+
     File order validation is critical - BWA-MEM requires synchronized
     R1/R2 pairs, and the check prevents mapping with mismatched pairs.
     """
@@ -226,10 +226,10 @@ def cons_genome_map(
     - If consensus contains repeats that map to multiple locations
     - Quality of consensus alignment (mismatches, soft-clipping)
     - Whether consensus extends correctly from the reference
-    
+
     The temporary merged FASTA file 'all_cons.fasta' is created in the
     current directory and not automatically cleaned up.
-    
+
     Consensus sequences should map with high identity to their respective
     ends. Multiple mappings or poor alignment quality suggests the consensus
     may not represent true telomeric extension.
@@ -273,12 +273,12 @@ def cons_cons_map(
       * Circular chromosome where ends should connect
       * Telomeric repeat arrays present at both ends
       * Potential artifact if sequences shouldn't match
-    
+
     This QC check is particularly useful for:
     - Bacterial genomes where circularity is expected
     - Identifying repetitive telomeric sequences
     - Validating that linear chromosome ends are truly distinct
-    
+
     Maps right consensus (query) against left consensus (reference) using
     minimap2 single-read mode with sorting and indexing.
     """
@@ -314,17 +314,17 @@ def cons_length(cons_file: str, output_handle: str, offset: int = 100) -> None:
     - seq_id: Identifier of the consensus sequence
     - end_cons: Length of true extension (full_cons - offset)
     - full_cons: Total length including offset region
-    
+
     The offset adjustment is important because consensus building may
     include some bases from the original reference sequence for context
     and alignment purposes. The 'end_cons' value represents only the
     novel sequence extending beyond the original assembly.
-    
+
     Example:
     - Full consensus: 250bp
-    - Offset: 100bp  
+    - Offset: 100bp
     - True extension: 150bp (reported as end_cons)
-    
+
     Used for summarizing extension results across multiple contigs.
     """
     cons_file = SeqIO.parse(cons_file, 'fasta')
@@ -368,18 +368,18 @@ def map_to_depth(bam_file: str, output_handle: str) -> None:
     Uses 'samtools depth -aa' which:
     - -aa: Output absolutely all positions, including zero-coverage
     - Ensures complete coverage profile even for uncovered regions
-    
+
     Output format (tab-delimited):
     - Column 1: Reference sequence name
     - Column 2: Position (1-based)
     - Column 3: Coverage depth at that position
-    
+
     The output file can be:
     - Plotted to visualize coverage across genome
     - Used to identify low-coverage regions
     - Analyzed to assess quality of consensus extensions
     - Imported into visualization tools like R or Python
-    
+
     Particularly useful for QC visualization to show how coverage
     changes across telomeric regions and consensus extensions.
     """
@@ -419,7 +419,7 @@ def finalize_log(log: str, right_fasta: str, left_fasta: str) -> None:
     5. Extracts trimmed portion of consensus sequences
     6. Writes new header section with final results
     7. Appends original log content below header
-    
+
     Final log structure:
     - FINAL GENOME EXTENSION header
     - Final consensus lengths (may show 'rejected' if validation failed)
@@ -427,12 +427,12 @@ def finalize_log(log: str, right_fasta: str, left_fasta: str) -> None:
     - Separator line
     - Original log content (initial consensus, trimming details)
     - Closing separator
-    
+
     Handles rejected consensus:
     - If 'rejected' in trim log: Shows 'rejected' instead of length
     - Creates empty SeqRecord for rejected consensus
     - For accepted consensus: Shows length and trimmed sequence
-    
+
     The final log provides a complete record of:
     - What extensions were added (top section)
     - How they were generated and validated (original log below)
