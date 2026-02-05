@@ -4,11 +4,11 @@ Script for finding and extracting telomeres from nanopore or illumina reads,
 which have been excluded from a de novo assembly.
 """
 
+from argparse import Namespace
 import logging
 import os
 import shutil
 import traceback
-from argparse import Namespace
 
 from telomore._version import __version__
 from telomore.utils.arg_parser import get_args, setup_logging

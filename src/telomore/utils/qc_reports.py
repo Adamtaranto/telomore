@@ -192,7 +192,11 @@ def qc_map_illumina(
 
 
 def cons_genome_map(
-    left_cons: str, right_cons: str, polished_genome: str, output_handle: str, t: int = 1
+    left_cons: str,
+    right_cons: str,
+    polished_genome: str,
+    output_handle: str,
+    t: int = 1,
 ) -> None:
     """
     Map consensus sequences against the polished reference genome.
